@@ -1,0 +1,452 @@
+CellProfiler Pipeline: http://www.cellprofiler.org
+Version:5
+DateRevision:425
+GitHash:
+ModuleCount:28
+HasImagePlaneDetails:False
+
+Images:[module_num:1|svn_version:'Unknown'|variable_revision_number:2|show_window:False|notes:['To begin creating your project, use the Images module to compile a list of files and/or folders that you want to analyze. You can also specify a set of rules to include only the desired files in your selected folders.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    :
+    Filter images?:Images only
+    Select the rule criteria:and (extension does isimage) (directory doesnot containregexp "[\\\\/]\\.")
+
+Metadata:[module_num:2|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:['The Metadata module optionally allows you to extract information describing your images (i.e, metadata) which will be stored along with your measurements. This information can be contained in the file name and/or location, or in an external file.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Extract metadata?:Yes
+    Metadata data type:Text
+    Metadata types:{}
+    Extraction method count:1
+    Metadata extraction method:Extract from image file headers
+    Metadata source:File name
+    Regular expression to extract from file name:^(?P<Plate>.*)_(?P<Well>[A-P][0-9]{2})_s(?P<Site>[0-9])_w(?P<ChannelNumber>[0-9])
+    Regular expression to extract from folder name:(?P<Date>[0-9]{4}_[0-9]{2}_[0-9]{2})$
+    Extract metadata from:All images
+    Select the filtering criteria:and (file does contain "")
+    Metadata file location:Elsewhere...|
+    Match file and image metadata:[]
+    Use case insensitive matching?:No
+    Metadata file name:None
+    Does cached metadata exist?:Yes
+
+NamesAndTypes:[module_num:3|svn_version:'Unknown'|variable_revision_number:8|show_window:False|notes:['The NamesAndTypes module allows you to assign a meaningful name to each image by which other modules will refer to it.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Assign a name to:Images matching rules
+    Select the image type:Grayscale image
+    Name to assign these images:DNA
+    Match metadata:[]
+    Image set matching method:Order
+    Set intensity range from:Image metadata
+    Assignments count:4
+    Single images count:0
+    Maximum intensity:255.0
+    Process as 3D?:No
+    Relative pixel spacing in X:1.0
+    Relative pixel spacing in Y:1.0
+    Relative pixel spacing in Z:1.0
+    Select the rule criteria:and (metadata does T "3")
+    Name to assign these images:DNA
+    Name to assign these objects:Cell
+    Select the image type:Grayscale image
+    Set intensity range from:Image metadata
+    Maximum intensity:255.0
+    Select the rule criteria:and (metadata does T "0")
+    Name to assign these images:CD25_Ki67
+    Name to assign these objects:Cell
+    Select the image type:Grayscale image
+    Set intensity range from:Image metadata
+    Maximum intensity:255.0
+    Select the rule criteria:and (metadata does T "1")
+    Name to assign these images:Actin
+    Name to assign these objects:Cell
+    Select the image type:Grayscale image
+    Set intensity range from:Image metadata
+    Maximum intensity:255.0
+    Select the rule criteria:and (metadata does T "2")
+    Name to assign these images:Mitochondria
+    Name to assign these objects:Cell
+    Select the image type:Grayscale image
+    Set intensity range from:Image metadata
+    Maximum intensity:255.0
+
+Groups:[module_num:4|svn_version:'Unknown'|variable_revision_number:2|show_window:False|notes:['The Groups module optionally allows you to split your list of images into image subsets (groups) which will be processed independently of each other. Examples of groupings include screening batches, microtiter plates, time-lapse movies, etc.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Do you want to group your images?:No
+    grouping metadata count:1
+    Metadata category:None
+
+MeasureImageQuality:[module_num:5|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Calculate metrics for which images?:All loaded images
+    Image count:1
+    Scale count:1
+    Threshold count:1
+    Select the images to measure:Actin, CD25_Ki67, DNA, Mitochondria
+    Include the image rescaling value?:Yes
+    Calculate blur metrics?:No
+    Spatial scale for blur measurements:20
+    Calculate saturation metrics?:Yes
+    Calculate intensity metrics?:Yes
+    Calculate thresholds?:No
+    Use all thresholding methods?:No
+    Select a thresholding method:Otsu
+    Typical fraction of the image covered by objects:0.1
+    Two-class or three-class thresholding?:Two classes
+    Minimize the weighted variance or the entropy?:Weighted variance
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+
+ImageMath:[module_num:6|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Operation:Add
+    Raise the power of the result by:1.0
+    Multiply the result by:1.0
+    Add to result:0.0
+    Set values less than 0 equal to 0?:Yes
+    Set values greater than 1 equal to 1?:Yes
+    Replace invalid values with 0?:Yes
+    Ignore the image masks?:Yes
+    Name the output image:Ki67_plus_MC
+    Image or measurement?:Image
+    Select the first image:Mitochondria
+    Multiply the first image by:5
+    Measurement:
+    Image or measurement?:Image
+    Select the second image:CD25_Ki67
+    Multiply the second image by:10
+    Measurement:
+    Image or measurement?:Image
+    Select the third image:Actin
+    Multiply the third image by:20
+    Measurement:
+    Image or measurement?:Image
+    Select the fourth image:DNA
+    Multiply the fourth image by:1.0
+    Measurement:
+
+IdentifyPrimaryObjects:[module_num:7|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:DNA
+    Name the primary objects to be identified:Nuclei
+    Typical diameter of objects, in pixel units (Min,Max):10,80
+    Discard objects outside the diameter range?:Yes
+    Discard objects touching the border of the image?:Yes
+    Method to distinguish clumped objects:Shape
+    Method to draw dividing lines between clumped objects:Shape
+    Size of smoothing filter:20
+    Suppress local maxima that are closer than this minimum allowed distance:20
+    Speed up by using lower-resolution image to find local maxima?:No
+    Fill holes in identified objects?:Never
+    Automatically calculate size of smoothing filter for declumping?:No
+    Automatically calculate minimum allowed distance between local maxima?:No
+    Handling of objects if excessive number of objects identified:Continue
+    Maximum number of objects:500
+    Use advanced settings?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Otsu
+    Threshold smoothing scale:0
+    Threshold correction factor:1.0
+    Lower and upper bounds on threshold:0.0,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Two classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Minimum Cross-Entropy
+
+IdentifyPrimaryObjects:[module_num:8|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:CD25_Ki67
+    Name the primary objects to be identified:Ki67
+    Typical diameter of objects, in pixel units (Min,Max):5,100
+    Discard objects outside the diameter range?:Yes
+    Discard objects touching the border of the image?:Yes
+    Method to distinguish clumped objects:None
+    Method to draw dividing lines between clumped objects:Intensity
+    Size of smoothing filter:20
+    Suppress local maxima that are closer than this minimum allowed distance:20
+    Speed up by using lower-resolution image to find local maxima?:No
+    Fill holes in identified objects?:Never
+    Automatically calculate size of smoothing filter for declumping?:No
+    Automatically calculate minimum allowed distance between local maxima?:No
+    Handling of objects if excessive number of objects identified:Continue
+    Maximum number of objects:500
+    Use advanced settings?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Robust Background
+    Threshold smoothing scale:1.3488
+    Threshold correction factor:1.0
+    Lower and upper bounds on threshold:0.001,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Two classes
+    Log transform before thresholding?:Yes
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Minimum Cross-Entropy
+
+IdentifyPrimaryObjects:[module_num:9|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:Actin
+    Name the primary objects to be identified:actin
+    Typical diameter of objects, in pixel units (Min,Max):10,100
+    Discard objects outside the diameter range?:No
+    Discard objects touching the border of the image?:Yes
+    Method to distinguish clumped objects:None
+    Method to draw dividing lines between clumped objects:Intensity
+    Size of smoothing filter:10
+    Suppress local maxima that are closer than this minimum allowed distance:7.0
+    Speed up by using lower-resolution image to find local maxima?:Yes
+    Fill holes in identified objects?:Never
+    Automatically calculate size of smoothing filter for declumping?:Yes
+    Automatically calculate minimum allowed distance between local maxima?:Yes
+    Handling of objects if excessive number of objects identified:Continue
+    Maximum number of objects:500
+    Use advanced settings?:Yes
+    Threshold setting version:12
+    Threshold strategy:Adaptive
+    Thresholding method:Minimum Cross-Entropy
+    Threshold smoothing scale:1.3488
+    Threshold correction factor:1.0
+    Lower and upper bounds on threshold:0.004,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Two classes
+    Log transform before thresholding?:Yes
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:100
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Robust Background
+
+IdentifyPrimaryObjects:[module_num:10|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:Mitochondria
+    Name the primary objects to be identified:MC
+    Typical diameter of objects, in pixel units (Min,Max):20,100
+    Discard objects outside the diameter range?:No
+    Discard objects touching the border of the image?:Yes
+    Method to distinguish clumped objects:Shape
+    Method to draw dividing lines between clumped objects:Shape
+    Size of smoothing filter:10
+    Suppress local maxima that are closer than this minimum allowed distance:7.0
+    Speed up by using lower-resolution image to find local maxima?:Yes
+    Fill holes in identified objects?:Never
+    Automatically calculate size of smoothing filter for declumping?:Yes
+    Automatically calculate minimum allowed distance between local maxima?:Yes
+    Handling of objects if excessive number of objects identified:Continue
+    Maximum number of objects:500
+    Use advanced settings?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Otsu
+    Threshold smoothing scale:1.3488
+    Threshold correction factor:1.0
+    Lower and upper bounds on threshold:0,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Two classes
+    Log transform before thresholding?:Yes
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Minimum Cross-Entropy
+
+IdentifySecondaryObjects:[module_num:11|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input objects:Nuclei
+    Name the objects to be identified:cell
+    Select the method to identify the secondary objects:Propagation
+    Select the input image:Ki67_plus_MC
+    Number of pixels by which to expand the primary objects:10
+    Regularization factor:0.05
+    Discard secondary objects touching the border of the image?:No
+    Discard the associated primary objects?:No
+    Name the new primary objects:FilteredNuclei
+    Fill holes in identified objects?:Yes
+    Threshold setting version:12
+    Threshold strategy:Adaptive
+    Thresholding method:Minimum Cross-Entropy
+    Threshold smoothing scale:0.0
+    Threshold correction factor:1.0
+    Lower and upper bounds on threshold:0.0,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Three classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Otsu
+
+RelateObjects:[module_num:12|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Parent objects:cell
+    Child objects:Ki67
+    Calculate child-parent distances?:None
+    Calculate per-parent means for all child measurements?:Yes
+    Calculate distances to other parents?:No
+    Do you want to save the children with parents as a new object set?:No
+    Name the output object:CellwithMC
+    Parent name:None
+
+RelateObjects:[module_num:13|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Parent objects:cell
+    Child objects:MC
+    Calculate child-parent distances?:None
+    Calculate per-parent means for all child measurements?:Yes
+    Calculate distances to other parents?:No
+    Do you want to save the children with parents as a new object set?:No
+    Name the output object:CellwithMCwithKi67
+    Parent name:None
+
+RelateObjects:[module_num:14|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Parent objects:cell
+    Child objects:actin
+    Calculate child-parent distances?:None
+    Calculate per-parent means for all child measurements?:Yes
+    Calculate distances to other parents?:No
+    Do you want to save the children with parents as a new object set?:No
+    Name the output object:CellwithMCwithKi67
+    Parent name:None
+
+RelateObjects:[module_num:15|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Parent objects:cell
+    Child objects:Nuclei
+    Calculate child-parent distances?:None
+    Calculate per-parent means for all child measurements?:Yes
+    Calculate distances to other parents?:No
+    Do you want to save the children with parents as a new object set?:No
+    Name the output object:CellwithMCwithKi67
+    Parent name:None
+
+MeasureImageIntensity:[module_num:16|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:DNA
+    Measure the intensity only from areas enclosed by objects?:Yes
+    Select input object sets:cell
+    Calculate custom percentiles:Yes
+    Specify percentiles to measure:10,90
+
+MeasureImageIntensity:[module_num:17|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:Mitochondria
+    Measure the intensity only from areas enclosed by objects?:Yes
+    Select input object sets:cell
+    Calculate custom percentiles:Yes
+    Specify percentiles to measure:10,90
+
+MeasureImageIntensity:[module_num:18|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:CD25_Ki67
+    Measure the intensity only from areas enclosed by objects?:Yes
+    Select input object sets:cell
+    Calculate custom percentiles:Yes
+    Specify percentiles to measure:10,90
+
+MeasureObjectIntensity:[module_num:19|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:Mitochondria
+    Select objects to measure:cell
+
+MeasureObjectIntensity:[module_num:20|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:CD25_Ki67
+    Select objects to measure:cell
+
+MeasureObjectIntensity:[module_num:21|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:Actin
+    Select objects to measure:cell
+
+MeasureObjectIntensity:[module_num:22|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:DNA
+    Select objects to measure:cell
+
+MeasureObjectSizeShape:[module_num:23|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select object sets to measure:MC, cell
+    Calculate the Zernike features?:Yes
+    Calculate the advanced features?:Yes
+
+MeasureColocalization:[module_num:24|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:DNA, Mitochondria
+    Set threshold as percentage of maximum intensity for the images:15.0
+    Select where to measure correlation:Within objects
+    Select objects to measure:MC, Nuclei
+    Run all metrics?:No
+    Calculate correlation and slope metrics?:No
+    Calculate the Manders coefficients?:No
+    Calculate the Rank Weighted Colocalization coefficients?:No
+    Calculate the Overlap coefficients?:Yes
+    Calculate the Manders coefficients using Costes auto threshold?:No
+    Method for Costes thresholding:Faster
+
+MeasureTexture:[module_num:25|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:DNA
+    Select objects to measure:Nuclei
+    Enter how many gray levels to measure the texture at:256
+    Hidden:1
+    Measure whole images or objects?:Objects
+    Texture scale to measure:2
+
+MeasureTexture:[module_num:26|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:Mitochondria
+    Select objects to measure:MC
+    Enter how many gray levels to measure the texture at:256
+    Hidden:1
+    Measure whole images or objects?:Objects
+    Texture scale to measure:2
+
+MeasureGranularity:[module_num:27|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:Mitochondria
+    Measure within objects?:Yes
+    Select objects to measure:cell
+    Subsampling factor for granularity measurements:0.25
+    Subsampling factor for background reduction:0.25
+    Radius of structuring element:1
+    Range of the granular spectrum:6
+
+ExportToSpreadsheet:[module_num:28|svn_version:'Unknown'|variable_revision_number:13|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the column delimiter:Comma (",")
+    Add image metadata columns to your object data file?:No
+    Add image file and folder names to your object data file?:Yes
+    Select the measurements to export:No
+    Calculate the per-image mean values for object measurements?:No
+    Calculate the per-image median values for object measurements?:No
+    Calculate the per-image standard deviation values for object measurements?:No
+    Output file location:Default Output Folder|Desktop/Julie/20230728_TCA/results_test_farm
+    Create a GenePattern GCT file?:No
+    Select source of sample row name:Metadata
+    Select the image to use as the identifier:None
+    Select the metadata to use as the identifier:None
+    Export all measurement types?:Yes
+    Press button to select measurements:Image|Granularity_3_Mitochondria,Image|Granularity_9_Mitochondria,Image|Granularity_5_Mitochondria,Image|Granularity_8_Mitochondria,Image|Granularity_2_Mitochondria,Image|Granularity_14_Mitochondria,Image|Granularity_12_Mitochondria,Image|Granularity_1_Mitochondria,Image|Granularity_7_Mitochondria,Image|Granularity_6_Mitochondria,Image|Granularity_10_Mitochondria,Image|Granularity_4_Mitochondria,Image|Granularity_16_Mitochondria,Image|Granularity_13_Mitochondria,Image|Granularity_11_Mitochondria,Image|Granularity_15_Mitochondria,Image|Intensity_Percentile_10_Mitochondria_MC,Image|Intensity_Percentile_10_DNA_Nuclei,Image|Intensity_Percentile_10_CD25_Ki67_Ki67,Image|Intensity_Percentile_90_DNA_Nuclei,Image|Intensity_Percentile_90_Mitochondria_MC,Image|Intensity_Percentile_90_CD25_Ki67_Ki67,Image|Intensity_TotalIntensity_DNA_Nuclei,Image|Intensity_TotalIntensity_Mitochondria_MC,Image|Intensity_TotalIntensity_CD25_Ki67_Ki67,Image|Intensity_UpperQuartileIntensity_DNA_Nuclei,Image|Intensity_UpperQuartileIntensity_Mitochondria_MC,Image|Intensity_UpperQuartileIntensity_CD25_Ki67_Ki67,Image|Intensity_MeanIntensity_Mitochondria_MC,Image|Intensity_MeanIntensity_DNA_Nuclei,Image|Intensity_MeanIntensity_CD25_Ki67_Ki67,Image|Intensity_TotalArea_DNA_Nuclei,Image|Intensity_TotalArea_CD25_Ki67_Ki67,Image|Intensity_TotalArea_Mitochondria_MC,Image|Intensity_LowerQuartileIntensity_Mitochondria_MC,Image|Intensity_LowerQuartileIntensity_CD25_Ki67_Ki67,Image|Intensity_LowerQuartileIntensity_DNA_Nuclei,Image|Intensity_MedianIntensity_DNA_Nuclei,Image|Intensity_MedianIntensity_Mitochondria_MC,Image|Intensity_MedianIntensity_CD25_Ki67_Ki67,Image|Intensity_MADIntensity_DNA_Nuclei,Image|Intensity_MADIntensity_CD25_Ki67_Ki67,Image|Intensity_MADIntensity_Mitochondria_MC,Image|Intensity_StdIntensity_DNA_Nuclei,Image|Intensity_StdIntensity_Mitochondria_MC,Image|Intensity_StdIntensity_CD25_Ki67_Ki67,Image|Intensity_MinIntensity_CD25_Ki67_Ki67,Image|Intensity_MinIntensity_DNA_Nuclei,Image|Intensity_MinIntensity_Mitochondria_MC,Image|Intensity_MaxIntensity_CD25_Ki67_Ki67,Image|Intensity_MaxIntensity_Mitochondria_MC,Image|Intensity_MaxIntensity_DNA_Nuclei,Image|Intensity_PercentMaximal_DNA_Nuclei,Image|Intensity_PercentMaximal_Mitochondria_MC,Image|Intensity_PercentMaximal_CD25_Ki67_Ki67,Image|Metadata_SizeX,Image|Metadata_FileLocation,Image|Metadata_SizeC,Image|Metadata_Series,Image|Metadata_SizeT,Image|Metadata_Plate,Image|Metadata_T,Image|Metadata_ColorFormat,Image|Metadata_Z,Image|Metadata_SizeZ,Image|Metadata_Well,Image|Metadata_ChannelName,Image|Metadata_Frame,Image|Metadata_Site,Image|Metadata_C,Image|Metadata_SizeY,Image|ModuleError_02Metadata,Image|ModuleError_15RelateObjects,Image|ModuleError_10IdentifyPrimaryObjects,Image|ModuleError_08IdentifyPrimaryObjects,Image|ModuleError_04Groups,Image|ModuleError_24MeasureObjectNeighbors,Image|ModuleError_32MeasureTexture,Image|ModuleError_19MeasureImageIntensity,Image|ModuleError_17RelateObjects,Image|ModuleError_21MeasureObjectIntensity,Image|ModuleError_03NamesAndTypes,Image|ModuleError_30MeasureObjectSizeShape,Image|ModuleError_01Images,Image|ModuleError_29MeasureGranularity,Image|ModuleError_13IdentifySecondaryObjects,Image|ModuleError_31MeasureObjectSizeShape,Image|ModuleError_23MeasureColocalization,Image|ModuleError_18MeasureImageIntensity,Image|ModuleError_09IdentifyPrimaryObjects,Image|ModuleError_16RelateObjects,Image|ModuleError_22MeasureObjectIntensity,Image|ModuleError_06ImageMath,Image|ModuleError_20MeasureImageIntensity,Image|ModuleError_14RelateObjects,Image|ModuleError_07IdentifyPrimaryObjects,Image|MD5Digest_CD25_Ki67,Image|MD5Digest_DNA,Image|MD5Digest_Actin,Image|MD5Digest_Mitochondria,Image|ExecutionTime_32MeasureTexture,Image|ExecutionTime_24MeasureObjectNeighbors,Image|ExecutionTime_15RelateObjects,Image|ExecutionTime_09IdentifyPrimaryObjects,Image|ExecutionTime_08IdentifyPrimaryObjects,Image|ExecutionTime_10IdentifyPrimaryObjects,Image|ExecutionTime_02Metadata,Image|ExecutionTime_19MeasureImageIntensity,Image|ExecutionTime_13IdentifySecondaryObjects,Image|ExecutionTime_20MeasureImageIntensity,Image|ExecutionTime_30MeasureObjectSizeShape,Image|ExecutionTime_04Groups,Image|ExecutionTime_03NamesAndTypes,Image|ExecutionTime_23MeasureColocalization,Image|ExecutionTime_18MeasureImageIntensity,Image|ExecutionTime_22MeasureObjectIntensity,Image|ExecutionTime_16RelateObjects,Image|ExecutionTime_07IdentifyPrimaryObjects,Image|ExecutionTime_29MeasureGranularity,Image|ExecutionTime_01Images,Image|ExecutionTime_06ImageMath,Image|ExecutionTime_31MeasureObjectSizeShape,Image|ExecutionTime_14RelateObjects,Image|ExecutionTime_21MeasureObjectIntensity,Image|ExecutionTime_17RelateObjects,Image|Threshold_OrigThreshold_Ki67,Image|Threshold_OrigThreshold_Nuclei,Image|Threshold_OrigThreshold_cell2,Image|Threshold_OrigThreshold_MC,Image|Threshold_OrigThreshold_actin,Image|Threshold_FinalThreshold_Nuclei,Image|Threshold_FinalThreshold_MC,Image|Threshold_FinalThreshold_cell2,Image|Threshold_FinalThreshold_Ki67,Image|Threshold_FinalThreshold_actin,Image|Threshold_WeightedVariance_Ki67,Image|Threshold_WeightedVariance_MC,Image|Threshold_WeightedVariance_Nuclei,Image|Threshold_WeightedVariance_actin,Image|Threshold_WeightedVariance_cell2,Image|Threshold_SumOfEntropies_actin,Image|Threshold_SumOfEntropies_Ki67,Image|Threshold_SumOfEntropies_MC,Image|Threshold_SumOfEntropies_Nuclei,Image|Threshold_SumOfEntropies_cell2,Image|Threshold_GuideThreshold_actin,Image|PathName_Mitochondria,Image|PathName_CD25_Ki67,Image|PathName_Actin,Image|PathName_DNA,Image|FileName_Mitochondria,Image|FileName_DNA,Image|FileName_CD25_Ki67,Image|FileName_Actin,Image|URL_Mitochondria,Image|URL_DNA,Image|URL_Actin,Image|URL_CD25_Ki67,Image|Series_DNA,Image|Series_CD25_Ki67,Image|Series_Mitochondria,Image|Series_Actin,Image|Scaling_DNA,Image|Scaling_Mitochondria,Image|Scaling_Actin,Image|Scaling_CD25_Ki67,Image|Width_Mitochondria,Image|Width_Actin,Image|Width_DNA,Image|Width_CD25_Ki67,Image|Frame_Mitochondria,Image|Frame_DNA,Image|Frame_CD25_Ki67,Image|Frame_Actin,Image|Group_Index,Image|Group_Number,Image|Group_Length,Image|Count_MC,Image|Count_actin,Image|Count_cell2,Image|Count_Nuclei,Image|Count_Ki67,Image|Height_Actin,Image|Height_DNA,Image|Height_CD25_Ki67,Image|Height_Mitochondria,cell2|Location_Center_Z,cell2|Location_Center_Y,cell2|Location_Center_X,cell2|Location_MaxIntensity_Y_Mitochondria,cell2|Location_MaxIntensity_Y_CD25_Ki67,cell2|Location_MaxIntensity_Z_CD25_Ki67,cell2|Location_MaxIntensity_Z_Mitochondria,cell2|Location_MaxIntensity_X_CD25_Ki67,cell2|Location_MaxIntensity_X_Mitochondria,cell2|Location_CenterMassIntensity_Y_CD25_Ki67,cell2|Location_CenterMassIntensity_Y_Mitochondria,cell2|Location_CenterMassIntensity_Z_CD25_Ki67,cell2|Location_CenterMassIntensity_Z_Mitochondria,cell2|Location_CenterMassIntensity_X_Mitochondria,cell2|Location_CenterMassIntensity_X_CD25_Ki67,cell2|Intensity_StdIntensityEdge_CD25_Ki67,cell2|Intensity_StdIntensityEdge_Mitochondria,cell2|Intensity_MinIntensityEdge_CD25_Ki67,cell2|Intensity_MinIntensityEdge_Mitochondria,cell2|Intensity_MADIntensity_Mitochondria,cell2|Intensity_MADIntensity_CD25_Ki67,cell2|Intensity_MedianIntensity_CD25_Ki67,cell2|Intensity_MedianIntensity_Mitochondria,cell2|Intensity_IntegratedIntensity_Mitochondria,cell2|Intensity_IntegratedIntensity_CD25_Ki67,cell2|Intensity_MassDisplacement_CD25_Ki67,cell2|Intensity_MassDisplacement_Mitochondria,cell2|Intensity_LowerQuartileIntensity_Mitochondria,cell2|Intensity_LowerQuartileIntensity_CD25_Ki67,cell2|Intensity_MeanIntensityEdge_CD25_Ki67,cell2|Intensity_MeanIntensityEdge_Mitochondria,cell2|Intensity_UpperQuartileIntensity_CD25_Ki67,cell2|Intensity_UpperQuartileIntensity_Mitochondria,cell2|Intensity_MinIntensity_CD25_Ki67,cell2|Intensity_MinIntensity_Mitochondria,cell2|Intensity_MaxIntensityEdge_Mitochondria,cell2|Intensity_MaxIntensityEdge_CD25_Ki67,cell2|Intensity_StdIntensity_Mitochondria,cell2|Intensity_StdIntensity_CD25_Ki67,cell2|Intensity_MaxIntensity_Mitochondria,cell2|Intensity_MaxIntensity_CD25_Ki67,cell2|Intensity_IntegratedIntensityEdge_Mitochondria,cell2|Intensity_IntegratedIntensityEdge_CD25_Ki67,cell2|Intensity_MeanIntensity_CD25_Ki67,cell2|Intensity_MeanIntensity_Mitochondria,cell2|Mean_actin_Number_Object_Number,cell2|Mean_actin_Location_Center_Y,cell2|Mean_actin_Location_Center_Z,cell2|Mean_actin_Location_Center_X,cell2|Mean_Ki67_Number_Object_Number,cell2|Mean_Ki67_Location_Center_Z,cell2|Mean_Ki67_Location_Center_Y,cell2|Mean_Ki67_Location_Center_X,cell2|Mean_Nuclei_Children_cell2_Count,cell2|Mean_Nuclei_Location_Center_Z,cell2|Mean_Nuclei_Location_Center_Y,cell2|Mean_Nuclei_Location_Center_X,cell2|Mean_Nuclei_Number_Object_Number,cell2|Mean_MC_Location_Center_X,cell2|Mean_MC_Location_Center_Z,cell2|Mean_MC_Location_Center_Y,cell2|Mean_MC_Number_Object_Number,cell2|Children_Ki67_Count,cell2|Children_Nuclei_Count,cell2|Children_actin_Count,cell2|Children_MC_Count,cell2|Parent_Nuclei,cell2|Number_Object_Number,MC|Correlation_K_CD25_Ki67_Mitochondria,MC|Correlation_K_Mitochondria_CD25_Ki67,MC|Correlation_Overlap_CD25_Ki67_Mitochondria,MC|Parent_cell2,MC|Location_Center_Y,MC|Location_Center_X,MC|Location_Center_Z,MC|Number_Object_Number,Ki67|Correlation_K_Mitochondria_CD25_Ki67,Ki67|Correlation_K_CD25_Ki67_Mitochondria,Ki67|Correlation_Overlap_CD25_Ki67_Mitochondria,Ki67|Location_Center_X,Ki67|Location_Center_Z,Ki67|Location_Center_Y,Ki67|Number_Object_Number,Ki67|Parent_cell2,actin|Location_Center_Y,actin|Location_Center_X,actin|Location_Center_Z,actin|Parent_cell2,actin|Number_Object_Number,Nuclei|Location_Center_Z,Nuclei|Location_Center_X,Nuclei|Location_Center_Y,Nuclei|Neighbors_FirstClosestDistance_5,Nuclei|Neighbors_PercentTouching_5,Nuclei|Neighbors_FirstClosestObjectNumber_5,Nuclei|Neighbors_SecondClosestObjectNumber_5,Nuclei|Neighbors_NumberOfNeighbors_5,Nuclei|Neighbors_AngleBetweenNeighbors_5,Nuclei|Neighbors_SecondClosestDistance_5,Nuclei|Parent_cell2,Nuclei|Number_Object_Number,Nuclei|Children_cell2_Count,Experiment|CellProfiler_Version,Experiment|Modification_Timestamp,Experiment|Run_Timestamp,Experiment|Metadata_GroupingTags,Experiment|Pipeline_Pipeline
+    Representation of Nan/Inf:NaN
+    Add a prefix to file names?:Yes
+    Filename prefix:MyExpt_
+    Overwrite existing files without warning?:No
+    Data to export:Image
+    Combine these object measurements with those of the previous object?:No
+    File name:DATA.csv
+    Use the object name for the file name?:Yes
+    Data to export:Experiment
+    Combine these object measurements with those of the previous object?:No
+    File name:DATA.csv
+    Use the object name for the file name?:Yes
+    Data to export:Object relationships
+    Combine these object measurements with those of the previous object?:No
+    File name:DATA.csv
+    Use the object name for the file name?:Yes
+    Data to export:Nuclei
+    Combine these object measurements with those of the previous object?:No
+    File name:DATA.csv
+    Use the object name for the file name?:Yes
+    Data to export:cell2
+    Combine these object measurements with those of the previous object?:No
+    File name:DATA.csv
+    Use the object name for the file name?:Yes
